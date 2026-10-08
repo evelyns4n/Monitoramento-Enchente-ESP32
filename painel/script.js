@@ -1,17 +1,16 @@
 /*
  * Painel de monitoramento de enchente.
  *
- * A função atualizarPainel(distancia) concentra a atualização da interface.
- * Quando a comunicação com o ESP32 for validada, ela pode ser chamada com
- * o valor recebido pela rede.
+ * O ESP8266 disponibiliza os dados em /dados.
+ * A função atualizarPainel() atualiza a interface.
  */
 
-function atualizarPainel(distancia) {
+function atualizarPainel(distancia, estado) {
   const elementoDistancia = document.getElementById("distancia");
   const elementoStatus = document.getElementById("status");
   const meterFill = document.getElementById("meterFill");
 
-  if (!Number.isFinite(distancia)) {
+  if (!Number.isFinite(distancia) || distancia < 0) {
     elementoDistancia.textContent = "--";
     elementoStatus.textContent = "Aguardando dados";
     meterFill.style.width = "0%";
@@ -19,24 +18,35 @@ function atualizarPainel(distancia) {
   }
 
   elementoDistancia.textContent = distancia.toFixed(1);
+  elementoStatus.textContent = estado || "Sem classificação";
 
-  /*
-   * Estes limites são provisórios.
-   * A calibração final deve ser feita depois que o sensor e o ponto
-   * de instalação forem confirmados.
-   */
-  const nivel = Math.max(0, Math.min(100, 100 - distancia));
-
+  // 30 cm = referência para início de atenção.
+  // 15 cm = referência para alerta.
+  const nivel = Math.max(0, Math.min(100, ((30 - distancia) / 15) * 100));
   meterFill.style.width = nivel + "%";
+}
 
-  if (distancia > 60) {
-    elementoStatus.textContent = "Normal";
-  } else if (distancia > 30) {
-    elementoStatus.textContent = "Atenção";
-  } else {
-    elementoStatus.textContent = "Alerta";
+async function buscarDados() {
+  try {
+    const resposta = await fetch("/dados");
+
+    if (!resposta.ok) {
+      throw new Error("Não foi possível obter os dados.");
+    }
+
+    const dados = await resposta.json();
+
+    atualizarPainel(
+      Number(dados.distancia),
+      dados.estado
+    );
+  } catch (erro) {
+    console.error(erro);
+    atualizarPainel(NaN, null);
+    document.getElementById("status").textContent = "Sem conexão";
   }
 }
 
-// Estado inicial do painel.
-atualizarPainel(NaN);
+// Atualiza o painel periodicamente.
+buscarDados();
+setInterval(buscarDados, 1000);
