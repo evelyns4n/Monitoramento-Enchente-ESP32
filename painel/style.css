@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f4f7;
+  color: #1f2937;
+}
+
+.container {
+  width: min(760px, 92%);
+  margin: 50px auto;
+}
+
+h1 {
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #667085;
+}
+
+.card {
+  margin-top: 30px;
+  padding: 30px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.value {
+  margin-top: 20px;
+  font-size: 64px;
+  font-weight: bold;
+}
+
+.unit {
+  color: #667085;
+}
+
+.meter {
+  height: 24px;
+  margin: 30px 0 20px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e5e7eb;
+}
+
+.meter-fill {
+  width: 0%;
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.status {
+  font-size: 22px;
+  font-weight: bold;
+}
