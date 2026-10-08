@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monitoramento de Enchente</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <h1>Monitoramento de Enchente</h1>
+    <p class="subtitle">Acompanhamento do nível de água em tempo real</p>
+
+    <section class="card">
+      <h2>Nível monitorado</h2>
+      <div id="distancia" class="value">--</div>
+      <div class="unit">cm</div>
+
+      <div class="meter">
+        <div id="meterFill" class="meter-fill"></div>
+      </div>
+
+      <div id="status" class="status">Aguardando dados</div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
